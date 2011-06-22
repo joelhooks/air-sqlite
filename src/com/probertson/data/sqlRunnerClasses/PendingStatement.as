@@ -24,17 +24,17 @@ THE SOFTWARE.
 */
 package com.probertson.data.sqlRunnerClasses
 {
-	import flash.data.SQLConnection;
-	import flash.data.SQLResult;
-	import flash.data.SQLStatement;
-	import flash.events.SQLErrorEvent;
-	import flash.events.SQLEvent;
-	
-	public class PendingStatement 
-	{
+    import flash.data.SQLConnection;
+    import flash.data.SQLResult;
+    import flash.data.SQLStatement;
+    import flash.events.SQLErrorEvent;
+    import flash.events.SQLEvent;
+
+    public class PendingStatement implements IPendingStatement
+    {
 		// ------- Constructor -------
-		
-		public function PendingStatement(cache:StatementCache, parameters:Object, handler:Function, itemClass:Class, errorHandler:Function) 
+
+		public function PendingStatement(cache:StatementCache, parameters:Object, handler:Function, itemClass:Class, errorHandler:Function)
 		{
 			_cache = cache;
 			_parameters = parameters;
@@ -42,73 +42,73 @@ package com.probertson.data.sqlRunnerClasses
 			_itemClass = itemClass;
 			_errorHandler = errorHandler;
 		}
-		
-		
+
+
 		// ------- Member vars -------
-		
+
 		private var _cache:StatementCache;
 		private var _parameters:Object;
 		private var _handler:Function;
 		private var _errorHandler:Function;
 		private var _itemClass:Class;
-		private var _pool:ConnectionPool;
-		
-		
+		private var _pool:IConnectionPool;
+
+
 		// ------- Public properties -------
-		
-		public function get statementCache():StatementCache { return _cache; }
-		
-		
-		// ------- Public methods -------
-		
-		public function executeWithConnection(pool:ConnectionPool, conn:SQLConnection):void
-		{
-			_pool = pool;
-			
-			var stmt:SQLStatement = _cache.getStatementForConnection(conn);
-			stmt.addEventListener(SQLEvent.RESULT, stmt_result);
-			stmt.addEventListener(SQLErrorEvent.ERROR, stmt_error);
-			
-			if (_itemClass != null)
-			{
-				stmt.itemClass = _itemClass;
-			}
-			
-			stmt.clearParameters();
-			if (_parameters != null)
-			{
-				for (var prop:String in _parameters)
-				{
-					stmt.parameters[":" + prop] = _parameters[prop];
-				}
-			}
-			
-			stmt.execute();
-		}
-		
-		
-		// ------- Event handling -------
-		
-		private function stmt_result(event:SQLEvent):void
-		{
-			var stmt:SQLStatement = event.target as SQLStatement;
-			stmt.removeEventListener(SQLEvent.RESULT, stmt_result);
-			stmt.removeEventListener(SQLErrorEvent.ERROR, stmt_error);
-			var result:SQLResult = stmt.getResult();
-			_pool.returnConnection(stmt.sqlConnection);
-			if (_handler != null)
-				_handler(result);
-		}
-		
-		
-		private function stmt_error(event:SQLErrorEvent):void
-		{
-			var stmt:SQLStatement = event.target as SQLStatement;
-			stmt.removeEventListener(SQLEvent.RESULT, stmt_result);
-			stmt.removeEventListener(SQLErrorEvent.ERROR, stmt_error);
-			_pool.returnConnection(stmt.sqlConnection);
-			if (_errorHandler != null)
-				_errorHandler(event.error);
-		}
-	}
+
+        public function get statementCache():StatementCache { return _cache; }
+
+
+        // ------- Public methods -------
+
+        public function executeWithConnection(pool:IConnectionPool, conn:SQLConnection):void
+        {
+            _pool = pool;
+
+            var stmt:SQLStatement = _cache.getStatementForConnection(conn);
+            stmt.addEventListener(SQLEvent.RESULT, stmt_result);
+            stmt.addEventListener(SQLErrorEvent.ERROR, stmt_error);
+
+            if (_itemClass != null)
+            {
+                stmt.itemClass = _itemClass;
+            }
+
+            stmt.clearParameters();
+            if (_parameters != null)
+            {
+                for (var prop:String in _parameters)
+                {
+                    stmt.parameters[":" + prop] = _parameters[prop];
+                }
+            }
+
+            stmt.execute();
+        }
+
+
+        // ------- Event handling -------
+
+        public function stmt_result(event:SQLEvent):void
+        {
+            var stmt:SQLStatement = event.target as SQLStatement;
+            stmt.removeEventListener(SQLEvent.RESULT, stmt_result);
+            stmt.removeEventListener(SQLErrorEvent.ERROR, stmt_error);
+            var result:SQLResult = stmt.getResult();
+            _pool.returnConnection(stmt.sqlConnection);
+            if (_handler != null)
+                _handler(result);
+        }
+
+
+        public function stmt_error(event:SQLErrorEvent):void
+        {
+            var stmt:SQLStatement = event.target as SQLStatement;
+            stmt.removeEventListener(SQLEvent.RESULT, stmt_result);
+            stmt.removeEventListener(SQLErrorEvent.ERROR, stmt_error);
+            _pool.returnConnection(stmt.sqlConnection);
+            if (_errorHandler != null)
+                _errorHandler(event.error);
+        }
+    }
 }

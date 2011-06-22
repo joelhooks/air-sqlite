@@ -26,22 +26,24 @@ package com.probertson.data
 {
 	import flash.errors.SQLError;
 	import flash.text.TextField;
-	
-	/**
+
+    import mx.rpc.IResponder;
+
+    /**
 	 * A Responder object provides a container to specify a result handler
 	 * function and an error handler function in a single object.
-	 * 
+	 *
 	 * <p>Use a Responder object to specify the handler methods for the
 	 * <code>SQLRunnerUnpooled.execute()</code> method.</p>
-	 * 
+	 *
 	 * @see SQLRunnerUnpooled#execute()
 	 */
 	public class Responder
 	{
 		/**
 		 * Creates a new Responder object.
-		 * 
-		 * @param result	The function that is called when statement 
+		 *
+		 * @param result	The function that is called when statement
 		 * 					execution finishes correctly.
 		 * @param error		The function that is called when an error
 		 * 					happens during statement execution.
@@ -53,9 +55,9 @@ package com.probertson.data
 		}
 
 		// ------- Public properties -------
-		
+
 		private var _result:Function;
-		
+
 		/**
 		 * The function that is called when statement execution finishes correctly.
 		 */
@@ -63,12 +65,12 @@ package com.probertson.data
 		{
 			return _result;
 		}
-		
-		
+
+
 		private var _error:Function;
-		
+
 		/**
-		 * The function that is called when an error happens during statement 
+		 * The function that is called when an error happens during statement
 		 * execution.
 		 */
 		public function get error():Function

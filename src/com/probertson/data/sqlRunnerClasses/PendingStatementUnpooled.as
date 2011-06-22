@@ -24,51 +24,51 @@ THE SOFTWARE.
 */
 package com.probertson.data.sqlRunnerClasses
 {
-	import com.probertson.data.Responder;
-	
-	public class PendingStatementUnpooled
-	{
-		
-		public function PendingStatementUnpooled(sql:String, parameters:Object, responder:Responder, itemClass:Class) 
+    import com.probertson.data.Responder;
+
+    public class PendingStatementUnpooled implements IPendingStatementUnpooled
+    {
+
+		public function PendingStatementUnpooled(sql:String, parameters:Object, responder:Responder, itemClass:Class)
 		{
 			_sql = sql;
 			_parameters = parameters;
 			_responder = responder;
 			_itemClass = itemClass;
 		}
-		
-		
+
+
 		// ------- Public properties -------
-		
+
 		private var _sql:String;
-		
-		public function get sql():String
-		{
-			return _sql;
-		}
-		
-		
-		private var _parameters:Object;
-		
-		public function get parameters():Object
-		{
-			return _parameters;
-		}
-		
-		
-		private var _responder:Responder;
-		
-		public function get responder():Responder
-		{
-			return _responder;
-		}
-		
-		
-		private var _itemClass:Class;
-		
-		public function get itemClass():Class
-		{
-			return _itemClass;
-		}
-	}
+
+        public function get sql():String
+        {
+            return _sql;
+        }
+
+
+        private var _parameters:Object;
+
+        public function get parameters():Object
+        {
+            return _parameters;
+        }
+
+
+        private var _responder:Responder;
+
+        public function get responder():Responder
+        {
+            return _responder;
+        }
+
+
+        private var _itemClass:Class;
+
+        public function get itemClass():Class
+        {
+            return _itemClass;
+        }
+    }
 }

@@ -27,18 +27,18 @@ package com.probertson.data
 	/**
 	 * A QueuedStatement object bundles together the values representing a single
 	 * SQL statement that's executed as part of a batch of SQL statements.
-	 * 
+	 *
 	 * @see SQLRunner#executeModify()
 	 */
-	public class QueuedStatement
-	{
+	public class QueuedStatement implements IQueuedStatement
+    {
 		/**
 		 * Creates a new QueuedStatement object.
 		 * @param sql	The SQL text of the statement to execute
 		 * @param parameters	An object (associative array) containing the names
 		 * 						and values of the parameters used in the statement.
-		 * 						The parameter names are the property names of the 
-		 * 						object, and the parameter values are the property 
+		 * 						The parameter names are the property names of the
+		 * 						object, and the parameter values are the property
 		 * 						values. The parameter names in the <code>sql</code>
 		 * 						parameter should use a colon (":") prefix.
 		 */
@@ -47,22 +47,14 @@ package com.probertson.data
 			_statementText = sql;
 			_parameters = parameters;
 		}
-		
+
 		// ------- Public properties -------
-		
+
 		private var _statementText:String;
-		/**
-		 * The SQL text of the statement to execute
-		 */
-		public function get statementText():String { return _statementText; }
-		
-		
-		
-		private var _parameters:Object;
-		/**
-		 * An object (associative array) containing the names and values of the 
-		 * parameters used in the statement.
-		 */
-		public function get parameters():Object { return _parameters; }
-	}
+        public function get statementText():String { return _statementText; }
+
+
+        private var _parameters:Object;
+        public function get parameters():Object { return _parameters; }
+    }
 }

@@ -24,60 +24,60 @@ THE SOFTWARE.
 */
 package com.probertson.data.sqlRunnerClasses
 {
-	import flash.data.SQLConnection;
-	import flash.data.SQLStatement;
-	import flash.utils.Dictionary;
-	
-	public class StatementCache
-	{
-		
+    import flash.data.SQLConnection;
+    import flash.data.SQLStatement;
+    import flash.utils.Dictionary;
+
+    public class StatementCache implements IStatementCache
+    {
+
 		public function StatementCache(sql:String)
 		{
 			_sql = sql;
 		}
-		
-		
+
+
 		// ------- Member vars -------
 		private var _sql:String;
 		private var _preferredConnections:Vector.<SQLConnection>;
 		private var _cache:Dictionary;
-		
-		
+
+
 		// ------- Public properties -------
-		public function get preferredConnections():Vector.<SQLConnection>
-		{
-			if (_preferredConnections == null || _preferredConnections.length == 0)
-			{
-				return null;
-			}
-			return _preferredConnections;
-		}
-		
-		
-		// ------- Public methods -------
-		public function getStatementForConnection(conn:SQLConnection):SQLStatement
-		{
-			var result:SQLStatement = null;
-			if (_cache == null)
-			{
-				_cache = new Dictionary();
-				_preferredConnections = new Vector.<SQLConnection>();
-			}
-			else
-			{
-				result = _cache[conn]; 
-			}
-			
-			if (result == null)
-			{
-				result = new SQLStatement();
-				result.sqlConnection = conn;
-				result.text = _sql;
-				_cache[conn] = result;
-				_preferredConnections.push(conn);
-			}
-			
-			return result;
-		}
-	}
+        public function get preferredConnections():Vector.<SQLConnection>
+        {
+            if (_preferredConnections == null || _preferredConnections.length == 0)
+            {
+                return null;
+            }
+            return _preferredConnections;
+        }
+
+
+        // ------- Public methods -------
+        public function getStatementForConnection(conn:SQLConnection):SQLStatement
+        {
+            var result:SQLStatement = null;
+            if (_cache == null)
+            {
+                _cache = new Dictionary();
+                _preferredConnections = new Vector.<SQLConnection>();
+            }
+            else
+            {
+                result = _cache[conn];
+            }
+
+            if (result == null)
+            {
+                result = new SQLStatement();
+                result.sqlConnection = conn;
+                result.text = _sql;
+                _cache[conn] = result;
+                _preferredConnections.push(conn);
+            }
+
+            return result;
+        }
+    }
 }
